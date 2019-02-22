@@ -61,8 +61,8 @@ class Converter(object):
 	def preprocess_w2v(self):
 		clean_train_rows = []
 		n_rows = self.train_data[self.text_field].size
-		print(n_rows)
-		print('-'*10)
+		# print(n_rows)
+		# print('-'*10)
 		for i in range(n_rows):
 			raw_text = self.train_data[self.text_field][i]
 			clean_text = self.textblock_to_wordslist(raw_text,remove_stopwords=True)
