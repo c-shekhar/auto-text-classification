@@ -1,6 +1,6 @@
 from imports import *
 from preprocess.converters import Converter
-from imports import Word2Vec
+from imports import Word2Vec,KeyedVectors
 
 class Vectorize(object):
 	def __init__(self):
@@ -43,8 +43,32 @@ class Vectorize(object):
 		return feature_vec
 
 
-	def to_word_vector(self, words_rows, model_path=None, num_features=300, remove_stopwords=True):
+	def to_word_vectors(self, words_rows, model_path=None, num_features=300, remove_stopwords=True):
 		model = Word2Vec.load(model_path)
+		vocab = model.wv.index2word
+		clean_train_rows = []
+		for i,row in enumerate(words_rows):
+			review_feature_vec = self.to_w2v(row,model,vocab,num_features,remove_stopwords)
+			clean_train_rows.append(review_feature_vec)
+			if ((i + 1) % 1000 == 0):
+				print(f"{i+1} train rows vectorized...")
+		return np.array(clean_train_rows)
+
+
+	def to_glove_vectors(self, words_rows, model_path=None, num_features=300, remove_stopwords=True):
+		model = KeyedVectors.load_word2vec_format(model_path, binary=False)
+		vocab = model.wv.index2word
+		clean_train_rows = []
+		for i,row in enumerate(words_rows):
+			review_feature_vec = self.to_w2v(row,model,vocab,num_features,remove_stopwords)
+			clean_train_rows.append(review_feature_vec)
+			if ((i + 1) % 1000 == 0):
+				print(f"{i+1} train rows vectorized...")
+		return np.array(clean_train_rows)
+
+
+	def to_fasttext_vectors(self, words_rows, model_path=None, num_features=300, remove_stopwords=True):
+		model = KeyedVectors.load_word2vec_format(model_path, binary=False)
 		vocab = model.wv.index2word
 		clean_train_rows = []
 		for i,row in enumerate(words_rows):
