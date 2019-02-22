@@ -8,6 +8,9 @@ from bs4 import BeautifulSoup as bs
 from nltk.corpus import stopwords
 from gensim.models import Word2Vec
 from gensim.models import word2vec
+from gensim.models import FastText
+from gensim.models import KeyedVectors
+from gensim.scripts.glove2word2vec import glove2word2vec
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
