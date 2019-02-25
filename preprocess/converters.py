@@ -75,9 +75,7 @@ class Converter(object):
 
 
 	def preprocess_w2v_train(self):
-		print('#######################################')
-		print('###### Preparing data for W2CV ########')
-		print('#######################################')
+		print('Preparing data for W2V/FastText...')
 		tokenizer = self.tokenizer
 		n_rows_train = self.train_data[self.text_field].size
 		n_rows_test = self.test_data[self.text_field].size
