@@ -1,6 +1,6 @@
 from imports import *
 from preprocess.converters import Converter
-from imports import Word2Vec,KeyedVectors
+from imports import Word2Vec,FastText,KeyedVectors,glove2word2vec
 
 class Vectorize(object):
 	def __init__(self):
@@ -56,7 +56,12 @@ class Vectorize(object):
 
 
 	def to_glove_vectors(self, words_rows, model_path=None, num_features=300, remove_stopwords=True):
-		model = KeyedVectors.load_word2vec_format(model_path, binary=False)
+		try:
+			word2vec_output_file = model_path+'.word2vec'
+			glove2word2vec(model_path, word2vec_output_file)
+		except Exception as e:
+			print(e)
+		model = KeyedVectors.load_word2vec_format(word2vec_output_file, binary=False)
 		vocab = model.wv.index2word
 		clean_train_rows = []
 		for i,row in enumerate(words_rows):
@@ -67,9 +72,18 @@ class Vectorize(object):
 		return np.array(clean_train_rows)
 
 
-	def to_fasttext_vectors(self, words_rows, model_path=None, num_features=300, remove_stopwords=True):
-		model = KeyedVectors.load_word2vec_format(model_path, binary=False)
-		vocab = model.wv.index2word
+	def to_fasttext_vectors(self, words_rows, supervised, model_path=None, num_features=300, remove_stopwords=True):
+		if not supervised:
+			if model_path.endswith('.vec'):
+				model = KeyedVectors.load_word2vec_format(model_path, binary=False)
+				vocab = model.wv.index2word
+			else:
+				model = FastText.load_fasttext_format(model_path, full_model=False)
+				vocab = model.wv.index2word
+		else:
+			model = FastText.load(model_path)
+			vocab = model.wv.index2word
+			
 		clean_train_rows = []
 		for i,row in enumerate(words_rows):
 			review_feature_vec = self.to_w2v(row,model,vocab,num_features,remove_stopwords)
