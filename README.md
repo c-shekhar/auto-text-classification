@@ -1,6 +1,7 @@
 ## auto-text-classification
 One of the widely used natural language processing task in different business problems is “Text Classification”.  
-The goal of text classification is to classify the text documents into one or more defined categories. Some examples of text classification are:
+The goal of text classification is to classify the text documents into one or more defined categories.  
+Some examples of text classification are:
  - Understanding audience sentiment from social media,
  - Detection of spam and non-spam emails,
  - Auto tagging of customer queries, and
